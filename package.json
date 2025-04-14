@@ -1,0 +1,28 @@
+{
+  "name": "kick-info",
+  "version": "1.0.0",
+  "description": "Kick Info Project",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon ./src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "eslint": "eslint src/**"
+  },
+  "author": "Daffa Hanif Rabbanee",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^4.21.2",
+    "express-async-errors": "^3.1.1",
+    "method-override": "^3.0.0",
+    "mongoose": "^8.13.2",
+    "pino": "^9.6.0",
+    "pino-http": "^10.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9",
+    "pino-pretty": "^13.0.0"
+  }
+}
