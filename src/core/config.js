@@ -21,4 +21,8 @@ module.exports = {
     connection: process.env.DB_CONNECTION,
     name: process.env.DB_NAME,
   },
+  externalAPi: {
+    baseUrl: process.env.EXTERNAL_API_BASE_URL,
+    apiKey: process.env.EXTERNAL_API_KEY
+  }
 };
