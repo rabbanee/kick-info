@@ -31,17 +31,17 @@ async function getfixtureslineups(request, response, next) {
   }
 }
 
-async function  getheadtohead(request, response, next) {
+async function  getheadtohead (request, response, next) {
   // return response.status(200).json({});
   try {
     const fixtureslineups= await footballService.getheadtohead();
 
-    return response.status(200).json(successResponse('fixtureslineups successfully', fixtureslineups));
+    return response.status(200).json(successResponse('headtohead successfully', fixtureslineups));
     // return response.status(200).json(timezone);
   } catch (error) {
     const status = err instanceof AppError ? err.statusCode : 500;
 
-    return response.status(status).json(errorResponse('Failed to fixtureslineups', error.message));
+    return response.status(status).json(errorResponse('Failed to headtohead', error.message));
   }
 }
 

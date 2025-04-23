@@ -1,5 +1,5 @@
 const footballRepository = require('./football-repository')
-const { fetchTimezone,fixtureslineups,} = require('../../../utils/integrations/football-api');
+const { fetchTimezone,fixtureslineups,headtohead} = require('../../../utils/integrations/football-api');
 const { AppError } = require('../../../utils/errors');
 
 
@@ -38,17 +38,14 @@ async function getfixtureslineups() {
   }
 }
 
-
-// football-service.js
-
 async function getheadtohead() {
  
   try {
    
-      const timezoneResponse = await gheadtohead();
+      const timezoneResponse = await headtohead();
       timezone = timezoneResponse.response;
       await footballRepository.SaveTimezone('timezone list', timezoneResponse.response);
-
+   
     return timezone;
   } catch (err) {
     console.error('[getTimezone] error:', err);

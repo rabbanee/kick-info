@@ -17,6 +17,7 @@ async function fixtureslineups() {
       'x-rapidapi-key': config.externalAPi.apiKey,
     },
   });
+  console.log('response fixtures :',response.data)
   return response.data;
 }
 
@@ -26,6 +27,7 @@ async function  headtohead() {
       'x-rapidapi-key': config.externalAPi.apiKey,
     },
   });
+  console.log('response headtohead :',response.data)
   return response.data;
 }
 
