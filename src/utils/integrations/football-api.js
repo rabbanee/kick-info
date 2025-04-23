@@ -12,7 +12,7 @@ async function fetchTimezone() {
 }
 
 async function fixtureslineups() {
-  const response = await axios.get(`${config.externalAPi.baseUrl}/fixtures/lineups?fixture=592872`, {
+  const response = await axios.get(`${config.externalAPi.baseUrl}/fixtures/lineups?fixture`, {
     headers: {
       'x-rapidapi-key': config.externalAPi.apiKey,
     },

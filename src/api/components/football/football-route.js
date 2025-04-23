@@ -11,4 +11,5 @@ module.exports = (app) => {
   route.get('/timezone', footballController.getTimezone)
   route.get('/fixtures/lineups', footballController.getfixtureslineups)
   route.get('/fixtures/headtohead', footballController.getheadtohead);
+
 };
