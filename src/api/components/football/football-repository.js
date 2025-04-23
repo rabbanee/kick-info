@@ -9,6 +9,8 @@ async function SaveTimezone(name, data) {
   return await Football.create({ name, data });
 }
 
+
+
 module.exports = {
   GetTimezone,
   SaveTimezone
