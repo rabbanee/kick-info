@@ -9,4 +9,5 @@ module.exports = (app) => {
 
   // Get list of football
   route.get('/timezone', footballController.getTimezone);
+  route.get('/fixtures', footballController.getFixtures);
 };
