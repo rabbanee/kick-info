@@ -44,9 +44,39 @@ async function  headtohead(queryParams) {
 }
 
 
+
+async function fetchStandings(queryParams) {
+  const queryParamsArray = Object.keys(queryParams).map(key => `${key}=${queryParams[key]}`);
+  const url = `${config.externalAPi.baseUrl}/standings?${queryParamsArray.join('&')}`;
+
+  const response = await axios.get(url, {
+    headers: {
+      'x-rapidapi-key': config.externalAPi.apiKey,
+    },
+  });
+  console.log('response fetchStandings :',response.data)
+  return response.data;
+}
+
+
+async function fixtureStatistics(queryParams) {
+  const queryParamsArray = Object.keys(queryParams).map(key => `${key}=${queryParams[key]}`);
+  const url = `${config.externalAPi.baseUrl}/fixtures/statistics?${queryParamsArray.join('&')}`;
+
+  const response = await axios.get(url, {
+    headers: {
+      'x-rapidapi-key': config.externalAPi.apiKey,
+    },
+  });
+  console.log('response fixtureStatistics :',response.data);
+  return response.data;
+}
+
 module.exports = {
   fetchTimezone,
   fetchFixtures,
   fixtureslineups,
-  headtohead
+  headtohead,
+  fetchStandings,
+  fixtureStatistics
 } ;

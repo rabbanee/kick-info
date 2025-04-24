@@ -1,6 +1,12 @@
 const footballRepository = require('./football-repository')
-const { fetchTimezone,fixtureslineups,headtohead, fetchFixtures} = require('../../../utils/integrations/football-api');
-
+const {
+  fetchTimezone,
+  fixtureslineups,
+  headtohead,
+  fetchFixtures,
+  fixtureStatistics,
+  fetchStandings
+} = require('../../../utils/integrations/football-api');
 
 async function getTimezone() {
   let timezone = await footballRepository.GetTimezone("timezone list");
@@ -15,7 +21,6 @@ async function getTimezone() {
 
   return timezone;
 }
-
 
 async function getFixtures(queryParams) {
   const fixturesResponse = await fetchFixtures(queryParams);
@@ -32,9 +37,23 @@ async function getheadtohead(queryParams) {
   return headToHeadResponse;
 }
 
+
+async function getStandings(queryParams) {
+  const standings = await fetchStandings(queryParams);
+  return standings;
+}
+
+
+async function getfixtureStatistics(queryParams) {
+  const headToHeadResponse = await fixtureStatistics(queryParams);
+  return headToHeadResponse;
+}
+
 module.exports = {
   getTimezone,
   getFixtures,
   getfixtureslineups,
-  getheadtohead
+  getheadtohead,
+  getStandings,
+  getfixtureStatistics
 }

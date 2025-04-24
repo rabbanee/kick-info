@@ -29,8 +29,6 @@ async function getFixtures(request, response, next) {
   }
 }
 
-
-
 async function getfixtureslineups(request, response, next) {
   const queryParams = request.query;
   try {
@@ -61,9 +59,40 @@ async function  getheadtohead (request, response, next) {
   }
 }
 
+
+async function getStandings(request, response, next) {
+  const queryParams = request.query;
+  try {
+    const standings = await footballService.getStandings(queryParams);
+    return response.status(200).json(successResponse('Standings fetched successfully', standings.response));
+
+  } catch (error) {
+    console.error('[getStandings] error:', error);
+    return next(error);
+  }
+}
+
+async function getfixtureStatistics(request, response, next) {
+  const queryParams = request.query;
+
+  try {
+    const statistics = await footballService.getfixtureStatistics(queryParams);
+    if (statistics.errors && Object.keys(statistics.errors).length > 0) {
+      const errorMessage = Object.values(statistics.errors)[0];
+      throw errorResponder(errorTypes.EXTERNAL, errorMessage);
+    }
+    return response.status(200).json(successResponse('Fixture statistics fetched successfully', statistics.response));
+  } catch (error) {
+    console.error('[getfixtureStatistics] error:', error);
+    return next(error);
+  }
+}
+
 module.exports = {
   getTimezone,
   getFixtures,
   getfixtureslineups,
-  getheadtohead
+  getheadtohead,
+  getStandings,
+  getfixtureStatistics,
 }
