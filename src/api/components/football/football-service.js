@@ -1,5 +1,5 @@
 const footballRepository = require('./football-repository')
-const { fetchTimezone, fetchFixtures } = require('../../../utils/integrations/football-api');
+const { fetchTimezone, fetchFixtures, fetchCountries, fetchLeagues,fetchSeasons } = require('../../../utils/integrations/football-api');
 
 
 async function getTimezone() {
@@ -16,12 +16,116 @@ async function getTimezone() {
   return timezone;
 }
 
-async function getFixtures(queryParams) {
-  const fixturesResponse = await fetchFixtures(queryParams);
-  return fixturesResponse;
+async function getFixtures(params = {}) {
+  let fixtures = await footballRepository.GetFixtures("fixtures list");
+
+  if (!fixtures?.data?.length) {
+    const fixturesResponse = await fetchFixtures(params);
+    fixtures = fixturesResponse.response;
+    await footballRepository.SaveFixtures('fixtures list', fixturesResponse.response);
+  } else {
+    fixtures = filterFixtures(fixtures.data, params);
+  }
+
+  return fixtures;
 }
 
+function filterFixtures(fixtures, {leagues, name, id, live }) {
+
+  return fixtures.filter(fixture => {
+    const leaguesMatch = leagues ? fixture.leagues === leagues : true;
+    const nameMatch = name ? fixture.name.includes(name) : true;
+    const idMatch = id ? fixture.id === id : true;
+    const liveMatch = live ? fixture.live === live : true;
+    return leaguesMatch && nameMatch && idMatch && liveMatch;
+});
+
+}
+
+
+
+// football-service.js
+async function getCountries(params = {}) {
+  let countries = await footballRepository.GetCountries("countries list");
+
+  if (!countries?.data?.length) {
+    const countriesResponse = await fetchCountries(params);
+    countries = countriesResponse.response;
+    await footballRepository.SaveCountries('countries list', countries);
+  } else {
+    countries = filterCountries(countries.data, params);
+  }
+
+  return countries;
+}
+
+function filterCountries(countries, { name, code, search }) {
+  return countries.filter(country => {
+    const nameMatch = name ? country.name.includes(name) : true;
+    const codeMatch = code ? country.code === code : true;
+    const searchMatch = search ?
+    country.name.includes(search) || country.code.includes(search) : true;
+    return nameMatch && codeMatch && searchMatch;
+  });
+}
+
+async function getLeagues(params = {}) {
+  let leagues = await footballRepository.GetLeagues("leagues list");
+
+  if (!leagues?.data?.length) {
+    const leaguesResponse = await fetchLeagues(params);
+    leagues = leaguesResponse.response;
+    await footballRepository.SaveLeagues('leagues list', leaguesResponse.response);
+  } else {
+    leagues = filterLeagues(leagues.data, params);
+  }
+
+  return leagues;
+}
+
+function filterLeagues(leagues, { countries, name, code, season }) {
+  return leagues.filter(league => {
+    const countriesMatch = countries ? league.countries === countries : true;
+    const nameMatch = name ? league.name.includes(name) : true;
+    const codeMatch = code ? league.code === code : true;
+    const seasonMatch = season ? league.season === season : true;
+    return countriesMatch && nameMatch && codeMatch && seasonMatch;
+  });
+}
+
+async function getSeasons(params = {}) {
+  let seasons = await footballRepository.GetSeasons("seasons list");
+
+  if (!seasons?.data?.length) {
+    try {
+      const seasonsResponse = await fetchSeasons(params);
+      seasons = seasonsResponse?.response || []; // Pastikan tidak undefined
+      
+      if (seasons.length === 0) {
+        seasons = getDummySeasons(); // Fallback data
+      }
+      
+      await footballRepository.SaveSeasons('seasons list', seasons);
+    } catch (error) {
+      seasons = getDummySeasons(); // Fallback jika API error
+    }
+  } else {
+    seasons = filterSeasons(seasons.data, params);
+  }
+
+  return seasons;
+}
+
+function getDummySeasons() {
+  return [
+    { id: 1, year: '2023', name: '2023/2024', is_current: true },
+    { id: 2, year: '2022', name: '2022/2023', is_current: false }
+  ];
+}
 module.exports = {
   getTimezone,
-  getFixtures
+  getFixtures,
+  getCountries,
+  getLeagues,
+  getSeasons,
 }

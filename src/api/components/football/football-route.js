@@ -1,5 +1,4 @@
 const express = require('express');
-
 const footballController = require('./football-controller');
 
 const route = express.Router();
@@ -10,4 +9,8 @@ module.exports = (app) => {
   // Get list of football
   route.get('/timezone', footballController.getTimezone);
   route.get('/fixtures', footballController.getFixtures);
+  route.get('/countries',footballController.getCountries);
+  route.get('/leagues',footballController.getLeagues);
+  route.get('/seasons',footballController.getSeasons);
+ 
 };

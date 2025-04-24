@@ -25,11 +25,6 @@
 //   //   })
 //   // );
 
-//   return {
-//     FootballTimezone,
-//   };
-// };
-
 
 module.exports = (db) =>
   db.model(
@@ -38,4 +33,6 @@ module.exports = (db) =>
       name: String,
       data: [String],
     })
+  
   );
+
