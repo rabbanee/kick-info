@@ -72,9 +72,67 @@ async function fetchFixtures(queryParams) {
   return response.data;
 }
 
+async function fixtureslineups(queryParams) {
+  const queryParamsArray = Object.keys(queryParams).map(key => `${key}=${queryParams[key]}`);
+  const response = await axios.get(`${config.externalAPi.baseUrl}/fixtures/lineups${queryParamsArray.join('&')}`, {
+    headers: {
+      'x-rapidapi-key': config.externalAPi.apiKey,
+    },
+  });
+  console.log('response fixtures :',response.data)
+  return response.data;
+}
+
+async function  headtohead(queryParams) {
+  const queryParamsArray = Object.keys(queryParams).map(key => `${key}=${queryParams[key]}`);
+  const response = await axios.get(`${config.externalAPi.baseUrl}/fixtures/headtohead?${queryParamsArray.join('&')}`, {
+    headers: {
+      'x-rapidapi-key': config.externalAPi.apiKey,
+    },
+  });
+  console.log('response headtohead :',response.data)
+  return response.data;
+}
+
+
+
+async function fetchStandings(queryParams) {
+  const queryParamsArray = Object.keys(queryParams).map(key => `${key}=${queryParams[key]}`);
+  const url = `${config.externalAPi.baseUrl}/standings?${queryParamsArray.join('&')}`;
+
+  const response = await axios.get(url, {
+    headers: {
+      'x-rapidapi-key': config.externalAPi.apiKey,
+    },
+  });
+  console.log('response fetchStandings :',response.data)
+  return response.data;
+}
+
+
+async function fixtureStatistics(queryParams) {
+  const queryParamsArray = Object.keys(queryParams).map(key => `${key}=${queryParams[key]}`);
+  const url = `${config.externalAPi.baseUrl}/fixtures/statistics?${queryParamsArray.join('&')}`;
+
+  const response = await axios.get(url, {
+    headers: {
+      'x-rapidapi-key': config.externalAPi.apiKey,
+    },
+  });
+  console.log('response fixtureStatistics :',response.data);
+  return response.data;
+}
+
 module.exports = {
   fetchStandings,
   fixtureStatistics,
   fetchTimezone,
+  fetchFixtures,
+  fixtureslineups,
+  headtohead,
+  fetchStandings,
+  fixtureStatistics
+} ;
+
   fetchFixtures
 };

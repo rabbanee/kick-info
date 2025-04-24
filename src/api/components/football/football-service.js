@@ -1,5 +1,12 @@
-const footballRepository = require('./football-repository');
-const { fetchTimezone, fetchFixtures, fetchStandings, fixtureStatistics } = require('../../../utils/integrations/football-api');
+const footballRepository = require('./football-repository')
+const {
+  fetchTimezone,
+  fixtureslineups,
+  headtohead,
+  fetchFixtures,
+  fixtureStatistics,
+  fetchStandings
+} = require('../../../utils/integrations/football-api');
 
 async function getTimezone() {
   let timezone = await footballRepository.GetTimezone("timezone list");
@@ -20,60 +27,33 @@ async function getFixtures(queryParams) {
   return fixturesResponse;
 }
 
-async function getStandings(league, season) {
-  console.log("Fetching standings for league:", league, "and season:", season);
+async function getfixtureslineups(queryParams) {
+  const fixturesLineupsResponse = await fixtureslineups(queryParams);
+  return fixturesLineupsResponse;
+}
 
-  const url = `${config.externalAPi.baseUrl}/standings?season=${season}&league=${league}`;
-
-  try {
-    const response = await axios.get(url, {
-      headers: {
-        'x-rapidapi-key': config.externalAPi.apiKey, 
-      },
-    });
-
-    if (!response || !response.data || !response.data.response || response.data.response.length === 0) {
-      throw new AppError('No standings data found for the given season and league', 404); 
-    }
-
-    const standingsData = await fetchStandings({ league, season });
-
-    console.log("Standings data fetched:", standingsData); 
-    
-    return response.data.response[0].standings;
-
-  } catch (err) {
-    console.error('[getStandings] error:', err);
-    throw new AppError(err.message || 'Failed to fetch standings', 500);
-  }
+async function getheadtohead(queryParams) {
+  const headToHeadResponse = await headtohead(queryParams);
+  return headToHeadResponse;
 }
 
 
-async function getfixtureStatistics(fixture, team) {
-  const url = `${config.externalAPi.baseUrl}/fixtures/statistics?fixture=${fixture}&team=${team}`;
+async function getStandings(queryParams) {
+  const standings = await fetchStandings(queryParams);
+  return standings;
+}
 
-  try {
-    const response = await axios.get(url, {
-      headers: {
-        'x-rapidapi-key': config.externalAPi.apiKey,
-      },
-    });
 
-    if (!response || !response.data || !response.data.response || response.data.response.length === 0) {
-      throw new AppError('No fixture statistics found for the given fixture and team', 404);  
-    }
-
-    return response.data.response[0].statistics;
-
-  } catch (err) {
-    console.error('[getfixtureStatistics] error:', err);
-    throw new AppError(err.message || 'Failed to fetch fixture statistics', 500);
-  }
+async function getfixtureStatistics(queryParams) {
+  const headToHeadResponse = await fixtureStatistics(queryParams);
+  return headToHeadResponse;
 }
 
 module.exports = {
   getTimezone,
+  getFixtures,
+  getfixtureslineups,
+  getheadtohead,
   getStandings,
-  getfixtureStatistics,
-  getFixtures
+  getfixtureStatistics
 }

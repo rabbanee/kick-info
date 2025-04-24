@@ -25,63 +25,75 @@ async function getFixtures(request, response, next) {
     return response.status(200).json(successResponse('Fixtures fetched successfully', fixturesResponse.response));
   } catch (error) {
     console.error('[getFixtures] error:', error);
-    return next(error);;
+    return next(error);
+  }
+}
+
+async function getfixtureslineups(request, response, next) {
+  const queryParams = request.query;
+  try {
+    const fixtureslineups= await footballService.getfixtureslineups(queryParams);
+    if (fixtureslineups.errors && Object.keys(fixtureslineups.errors).length > 0) {
+      const errorMessage = Object.values(fixtureslineups.errors)[0];
+      throw errorResponder(errorTypes.EXTERNAL, errorMessage);
+    }
+    return response.status(200).json(successResponse('fixtureslineups successfully', fixtureslineups.response));
+  } catch (error) {
+    console.error('[getFixtures] error:', error);
+    return next(error);
+  }
+}
+
+async function  getheadtohead (request, response, next) {
+  const queryParams = request.query;
+  try {
+    const headToHeadResponse = await footballService.getheadtohead(queryParams);
+    if (headToHeadResponse.errors && Object.keys(headToHeadResponse.errors).length > 0) {
+      const errorMessage = Object.values(headToHeadResponse.errors)[0];
+      throw errorResponder(errorTypes.EXTERNAL, errorMessage);
+    }
+    return response.status(200).json(successResponse('headtohead successfully', headToHeadResponse.response));
+  } catch (error) {
+    console.error('[getFixtures] error:', error);
+    return next(error);
   }
 }
 
 
 async function getStandings(request, response, next) {
-  console.log("Received query parameters:", request.query); 
-  const { season, league } = request.query; 
-  
-    if (!season || !league) {
-      return response.status(400).json({ error: 'Missing required query parameters (season, league)' });
-    }
+  const queryParams = request.query;
+  try {
+    const standings = await footballService.getStandings(queryParams);
+    return response.status(200).json(successResponse('Standings fetched successfully', standings.response));
 
-    try {
-    const standings = await footballService.getStandings(league, season);
-    return response.status(200)(200).json({
-      status: 'success',
-      message: 'Standings fetched successfully',
-      data: standings
-    });
   } catch (error) {
-    const status = error instanceof AppError ? error.statusCode : 500;
-    return response.status(status).json({
-      status: 'error',
-      message: 'Failed to fetch standings',
-      details: error.message
-    });
+    console.error('[getStandings] error:', error);
+    return next(error);
   }
 }
 
 async function getfixtureStatistics(request, response, next) {
-  const { fixture, team } = request.query;
-
-  if (!fixture || !team) {
-    return response.status(400).json({ error: 'Missing required query parameters (fixture, team)' });
-  }
+  const queryParams = request.query;
 
   try {
-    const statistics = await footballService.getfixtureStatistics(fixture, team);
-    return response.status(200).json({
-      status: 'success',
-      message: 'Fixture statistics fetched successfully',
-      data: statistics
-    });
+    const statistics = await footballService.getfixtureStatistics(queryParams);
+    if (statistics.errors && Object.keys(statistics.errors).length > 0) {
+      const errorMessage = Object.values(statistics.errors)[0];
+      throw errorResponder(errorTypes.EXTERNAL, errorMessage);
+    }
+    return response.status(200).json(successResponse('Fixture statistics fetched successfully', statistics.response));
   } catch (error) {
-    const status = error instanceof AppError ? error.statusCode : 500;
-    return response.status(status).json({
-      status: 'error',
-      message: 'Failed to fetch fixture statistics',
-      details: error.message
-    });
+    console.error('[getfixtureStatistics] error:', error);
+    return next(error);
   }
 }
 
+
 module.exports = {
   getTimezone,
+  getFixtures,
+  getfixtureslineups,
+  getheadtohead,
   getStandings,
   getfixtureStatistics,
-  getFixtures
-};
+}

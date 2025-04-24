@@ -44,4 +44,10 @@ module.exports = (app) => {
       });
   });
   route.get('/fixtures', footballController.getFixtures);
+
+  route.get('/fixtures/lineups', footballController.getfixtureslineups)
+  route.get('/fixtures/headtohead', footballController.getheadtohead);
+
+  route.get('/fixtures/statistics', footballController.getfixtureStatistics);
+  route.get('/standings', footballController.getStandings);
 };
