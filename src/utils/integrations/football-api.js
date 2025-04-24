@@ -77,6 +77,4 @@ module.exports = {
   fixtureStatistics,
   fetchTimezone,
   fetchFixtures
-  fetchStandings,
-  fixtureStatistics
 };

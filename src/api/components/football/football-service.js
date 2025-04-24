@@ -4,9 +4,6 @@ const { fetchTimezone, fetchFixtures, fetchStandings, fixtureStatistics } = requ
 async function getTimezone() {
   let timezone = await footballRepository.GetTimezone("timezone list");
 
-  try {
-    let timezone = await footballRepository.GetTimezone("timezone list");
-
   if (!timezone?.data?.length) {
     const timezoneResponse = await fetchTimezone();
     timezone = timezoneResponse.response;
@@ -77,7 +74,6 @@ async function getfixtureStatistics(fixture, team) {
 module.exports = {
   getTimezone,
   getStandings,
-  getfixtureStatistics
-  getTimezone,
+  getfixtureStatistics,
   getFixtures
 }
