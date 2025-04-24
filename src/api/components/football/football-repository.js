@@ -75,7 +75,6 @@ async function GetTimezone(name) {
 async function SaveTimezone(name, data) {
   return await Football.create({ name, data });
 }
-
 async function GetCountries(name) {
   return Football.findOne({name});
 }

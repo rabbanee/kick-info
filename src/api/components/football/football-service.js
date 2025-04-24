@@ -1,6 +1,15 @@
 const footballRepository = require('./football-repository')
-const { fetchTimezone, fetchFixtures, fetchCountries, fetchLeagues,fetchSeasons } = require('../../../utils/integrations/football-api');
-
+const {
+  fetchTimezone,
+  fixtureslineups,
+  headtohead,
+  fetchFixtures,
+  fixtureStatistics,
+  fetchStandings,
+  fetchLeagues,
+  fetchCountries,
+  fetchSeasons,
+} = require('../../../utils/integrations/football-api');
 
 async function getTimezone() {
   let timezone = await footballRepository.GetTimezone("timezone list");
@@ -29,9 +38,7 @@ async function getFixtures(params = {}) {
 
   return fixtures;
 }
-
 function filterFixtures(fixtures, {leagues, name, id, live }) {
-
   return fixtures.filter(fixture => {
     const leaguesMatch = leagues ? fixture.leagues === leagues : true;
     const nameMatch = name ? fixture.name.includes(name) : true;
@@ -122,10 +129,36 @@ function getDummySeasons() {
     { id: 2, year: '2022', name: '2022/2023', is_current: false }
   ];
 }
+async function getfixtureslineups(queryParams) {
+  const fixturesLineupsResponse = await fixtureslineups(queryParams);
+  return fixturesLineupsResponse;
+}
+
+async function getheadtohead(queryParams) {
+  const headToHeadResponse = await headtohead(queryParams);
+  return headToHeadResponse;
+}
+
+
+async function getStandings(queryParams) {
+  const standings = await fetchStandings(queryParams);
+  return standings;
+}
+
+
+async function getfixtureStatistics(queryParams) {
+  const headToHeadResponse = await fixtureStatistics(queryParams);
+  return headToHeadResponse;
+}
+
 module.exports = {
   getTimezone,
   getFixtures,
+  getfixtureslineups,
+  getheadtohead,
+  getStandings,
+  getfixtureStatistics,
   getCountries,
   getLeagues,
-  getSeasons,
+  getSeasons
 }
