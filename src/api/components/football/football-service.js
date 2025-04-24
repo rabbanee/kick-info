@@ -1,60 +1,40 @@
 const footballRepository = require('./football-repository')
-const { fetchTimezone,fixtureslineups,headtohead} = require('../../../utils/integrations/football-api');
-const { AppError } = require('../../../utils/errors');
+const { fetchTimezone,fixtureslineups,headtohead, fetchFixtures} = require('../../../utils/integrations/football-api');
 
 
 async function getTimezone() {
- 
-  try {
-    let timezone = await footballRepository.GetTimezone("timezone list");
+  let timezone = await footballRepository.GetTimezone("timezone list");
 
-    if (!timezone?.data?.length) {
-      const timezoneResponse = await fetchTimezone();
-      timezone = timezoneResponse.response;
-      await footballRepository.SaveTimezone('timezone list', timezoneResponse.response);
-    } else {
-      timezone = timezone.data;
-    }
-
-    return timezone;
-  } catch (err) {
-    console.error('[getTimezone] error:', err);
-    throw new AppError(err.message || 'Internal Server Error', 500);
+  if (!timezone?.data?.length) {
+    const timezoneResponse = await fetchTimezone();
+    timezone = timezoneResponse.response;
+    await footballRepository.SaveTimezone('timezone list', timezoneResponse.response);
+  } else {
+    timezone = timezone.data;
   }
+
+  return timezone;
 }
 
-async function getfixtureslineups() {
- 
-  try {
-   
-      const timezoneResponse = await fixtureslineups();
-      timezone = timezoneResponse.response;
-      await footballRepository.SaveTimezone('timezone list', timezoneResponse.response);
 
-    return timezone;
-  } catch (err) {
-    console.error('[getTimezone] error:', err);
-    throw new AppError(err.message || 'Internal Server Error', 500);
-  }
+async function getFixtures(queryParams) {
+  const fixturesResponse = await fetchFixtures(queryParams);
+  return fixturesResponse;
 }
 
-async function getheadtohead() {
- 
-  try {
-   
-      const timezoneResponse = await headtohead();
-      timezone = timezoneResponse.response;
-      await footballRepository.SaveTimezone('timezone list', timezoneResponse.response);
-   
-    return timezone;
-  } catch (err) {
-    console.error('[getTimezone] error:', err);
-    throw new AppError(err.message || 'Internal Server Error', 500);
-  }
+async function getfixtureslineups(queryParams) {
+  const fixturesLineupsResponse = await fixtureslineups(queryParams);
+  return fixturesLineupsResponse;
+}
+
+async function getheadtohead(queryParams) {
+  const headToHeadResponse = await headtohead(queryParams);
+  return headToHeadResponse;
 }
 
 module.exports = {
-getTimezone,
-getfixtureslineups,
-getheadtohead
+  getTimezone,
+  getFixtures,
+  getfixtureslineups,
+  getheadtohead
 }

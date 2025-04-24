@@ -14,42 +14,56 @@ async function getTimezone(request, response, next) {
   }
 }
 
+async function getFixtures(request, response, next) {
+  const queryParams = request.query;
+  try {
+    const fixturesResponse = await footballService.getFixtures(queryParams);
+    if (fixturesResponse.errors && Object.keys(fixturesResponse.errors).length > 0) {
+      const errorMessage = Object.values(fixturesResponse.errors)[0];
+      throw errorResponder(errorTypes.EXTERNAL, errorMessage);
+    }
+    return response.status(200).json(successResponse('Fixtures fetched successfully', fixturesResponse.response));
+  } catch (error) {
+    console.error('[getFixtures] error:', error);
+    return next(error);
+  }
+}
+
+
 
 async function getfixtureslineups(request, response, next) {
-  // return response.status(200).json({});
+  const queryParams = request.query;
   try {
-    const fixtureslineups= await footballService.getfixtureslineups();
-
-    return response.status(200).json(successResponse('fixtureslineups successfully', fixtureslineups));
-    // return response.status(200).json(timezone);
+    const fixtureslineups= await footballService.getfixtureslineups(queryParams);
+    if (fixtureslineups.errors && Object.keys(fixtureslineups.errors).length > 0) {
+      const errorMessage = Object.values(fixtureslineups.errors)[0];
+      throw errorResponder(errorTypes.EXTERNAL, errorMessage);
+    }
+    return response.status(200).json(successResponse('fixtureslineups successfully', fixtureslineups.response));
   } catch (error) {
-    const status = err instanceof AppError ? err.statusCode : 500;
-
-    return response.status(status).json(errorResponse('Failed to fixtureslineups', error.message));
+    console.error('[getFixtures] error:', error);
+    return next(error);
   }
 }
 
 async function  getheadtohead (request, response, next) {
-  // return response.status(200).json({});
+  const queryParams = request.query;
   try {
-    const fixtureslineups= await footballService.getheadtohead();
-
-    return response.status(200).json(successResponse('headtohead successfully', fixtureslineups));
-    // return response.status(200).json(timezone);
+    const headToHeadResponse = await footballService.getheadtohead(queryParams);
+    if (headToHeadResponse.errors && Object.keys(headToHeadResponse.errors).length > 0) {
+      const errorMessage = Object.values(headToHeadResponse.errors)[0];
+      throw errorResponder(errorTypes.EXTERNAL, errorMessage);
+    }
+    return response.status(200).json(successResponse('headtohead successfully', headToHeadResponse.response));
   } catch (error) {
-    const status = err instanceof AppError ? err.statusCode : 500;
-
-    return response.status(status).json(errorResponse('Failed to headtohead', error.message));
+    console.error('[getFixtures] error:', error);
+    return next(error);
   }
 }
 
 module.exports = {
   getTimezone,
+  getFixtures,
   getfixtureslineups,
   getheadtohead
 }
-
-
-
-
-
