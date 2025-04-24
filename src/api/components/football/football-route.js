@@ -43,4 +43,5 @@ module.exports = (app) => {
         res.status(500).json({ error: err.message });
       });
   });
+  route.get('/fixtures', footballController.getFixtures);
 };
