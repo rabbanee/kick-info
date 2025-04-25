@@ -1,4 +1,4 @@
-const footballRepository = require('./football-repository')
+const footballRepository = require("./football-repository");
 const {
   fetchTimezone,
   fixtureslineups,
@@ -9,7 +9,7 @@ const {
   fetchLeagues,
   fetchCountries,
   fetchSeasons,
-} = require('../../../utils/integrations/football-api');
+} = require("../../../utils/integrations/football-api");
 
 async function getTimezone() {
   let timezone = await footballRepository.GetTimezone("timezone list");
@@ -17,7 +17,10 @@ async function getTimezone() {
   if (!timezone?.data?.length) {
     const timezoneResponse = await fetchTimezone();
     timezone = timezoneResponse.response;
-    await footballRepository.SaveTimezone('timezone list', timezoneResponse.response);
+    await footballRepository.SaveTimezone(
+      "timezone list",
+      timezoneResponse.response
+    );
   } else {
     timezone = timezone.data;
   }
@@ -25,31 +28,20 @@ async function getTimezone() {
   return timezone;
 }
 
-async function getFixtures(params = {}) {
-  let fixtures = await footballRepository.GetFixtures("fixtures list");
-
-  if (!fixtures?.data?.length) {
-    const fixturesResponse = await fetchFixtures(params);
-    fixtures = fixturesResponse.response;
-    await footballRepository.SaveFixtures('fixtures list', fixturesResponse.response);
-  } else {
-    fixtures = filterFixtures(fixtures.data, params);
-  }
-
-  return fixtures;
+async function getFixtures(queryParams) {
+  const fixturesResponse = await fetchFixtures(queryParams);
+  return fixturesResponse;
 }
-function filterFixtures(fixtures, {leagues, name, id, live }) {
-  return fixtures.filter(fixture => {
+
+function filterFixtures(fixtures, { leagues, name, id, live }) {
+  return fixtures.filter((fixture) => {
     const leaguesMatch = leagues ? fixture.leagues === leagues : true;
     const nameMatch = name ? fixture.name.includes(name) : true;
     const idMatch = id ? fixture.id === id : true;
     const liveMatch = live ? fixture.live === live : true;
     return leaguesMatch && nameMatch && idMatch && liveMatch;
-});
-
+  });
 }
-
-
 
 // football-service.js
 async function getCountries(params = {}) {
@@ -58,7 +50,7 @@ async function getCountries(params = {}) {
   if (!countries?.data?.length) {
     const countriesResponse = await fetchCountries(params);
     countries = countriesResponse.response;
-    await footballRepository.SaveCountries('countries list', countries);
+    await footballRepository.SaveCountries("countries list", countries);
   } else {
     countries = filterCountries(countries.data, params);
   }
@@ -67,11 +59,12 @@ async function getCountries(params = {}) {
 }
 
 function filterCountries(countries, { name, code, search }) {
-  return countries.filter(country => {
+  return countries.filter((country) => {
     const nameMatch = name ? country.name.includes(name) : true;
     const codeMatch = code ? country.code === code : true;
-    const searchMatch = search ?
-    country.name.includes(search) || country.code.includes(search) : true;
+    const searchMatch = search
+      ? country.name.includes(search) || country.code.includes(search)
+      : true;
     return nameMatch && codeMatch && searchMatch;
   });
 }
@@ -82,7 +75,10 @@ async function getLeagues(params = {}) {
   if (!leagues?.data?.length) {
     const leaguesResponse = await fetchLeagues(params);
     leagues = leaguesResponse.response;
-    await footballRepository.SaveLeagues('leagues list', leaguesResponse.response);
+    await footballRepository.SaveLeagues(
+      "leagues list",
+      leaguesResponse.response
+    );
   } else {
     leagues = filterLeagues(leagues.data, params);
   }
@@ -91,7 +87,7 @@ async function getLeagues(params = {}) {
 }
 
 function filterLeagues(leagues, { countries, name, code, season }) {
-  return leagues.filter(league => {
+  return leagues.filter((league) => {
     const countriesMatch = countries ? league.countries === countries : true;
     const nameMatch = name ? league.name.includes(name) : true;
     const codeMatch = code ? league.code === code : true;
@@ -107,12 +103,12 @@ async function getSeasons(params = {}) {
     try {
       const seasonsResponse = await fetchSeasons(params);
       seasons = seasonsResponse?.response || []; // Pastikan tidak undefined
-      
+
       if (seasons.length === 0) {
         seasons = getDummySeasons(); // Fallback data
       }
-      
-      await footballRepository.SaveSeasons('seasons list', seasons);
+
+      await footballRepository.SaveSeasons("seasons list", seasons);
     } catch (error) {
       seasons = getDummySeasons(); // Fallback jika API error
     }
@@ -125,8 +121,8 @@ async function getSeasons(params = {}) {
 
 function getDummySeasons() {
   return [
-    { id: 1, year: '2023', name: '2023/2024', is_current: true },
-    { id: 2, year: '2022', name: '2022/2023', is_current: false }
+    { id: 1, year: "2023", name: "2023/2024", is_current: true },
+    { id: 2, year: "2022", name: "2022/2023", is_current: false },
   ];
 }
 async function getfixtureslineups(queryParams) {
@@ -139,12 +135,10 @@ async function getheadtohead(queryParams) {
   return headToHeadResponse;
 }
 
-
 async function getStandings(queryParams) {
   const standings = await fetchStandings(queryParams);
   return standings;
 }
-
 
 async function getfixtureStatistics(queryParams) {
   const headToHeadResponse = await fixtureStatistics(queryParams);
@@ -160,5 +154,5 @@ module.exports = {
   getfixtureStatistics,
   getCountries,
   getLeagues,
-  getSeasons
-}
+  getSeasons,
+};
