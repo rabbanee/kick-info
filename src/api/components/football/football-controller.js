@@ -117,6 +117,21 @@ async function getSeasons(request, response, next) {
   }
 }
 
+async function getFixtureRounds(request, response, next) {
+  try {
+    const queryParams = request.query;
+    const rounds = await footballService.getFixtureRounds(queryParams);
+    if (rounds.errors && Object.keys(rounds.errors).length > 0) {
+      const errorMessage = Object.values(rounds.errors)[0];
+      throw errorResponder(errorTypes.EXTERNAL, errorMessage);
+    }
+    return response.status(200).json(successResponse('Rounds fetched successfully', rounds.response));
+  } catch (error) {
+    console.error('[getSeasons] error:', error);
+    return next(error);
+  }
+}
+
 module.exports = {
   getTimezone,
   getFixtures,
@@ -127,4 +142,5 @@ module.exports = {
   getheadtohead,
   getStandings,
   getfixtureStatistics,
+  getFixtureRounds
 }

@@ -54,15 +54,16 @@ async function fetchLeagues(queryParams) {
   return response.data;
 }
 
-async function fetchSeasons(params = {}) {
-  const response = await axios.get(`${config.externalAPi.baseUrl}/seasons`, {
+async function fetchSeasons(queryParams) {
+  const queryParamsArray = Object.keys(queryParams).map(
+    (key) => `${key}=${queryParams[key]}`
+  );
+  const response = await axios.get(`${config.externalAPi.baseUrl}/leagues/seasons?${queryParamsArray.join(
+    "&"
+  )}`, {
     headers: {
       "x-rapidapi-key": config.externalAPi.apiKey,
-    },
-    params: {
-      league: params.league,
-      season: params.season,
-    },
+    }
   });
   return response.data;
 }
@@ -72,7 +73,7 @@ async function fixtureslineups(queryParams) {
     (key) => `${key}=${queryParams[key]}`
   );
   const response = await axios.get(
-    `${config.externalAPi.baseUrl}/fixtures/lineups${queryParamsArray.join(
+    `${config.externalAPi.baseUrl}/fixtures/lineups?${queryParamsArray.join(
       "&"
     )}`,
     {
@@ -137,6 +138,23 @@ async function fixtureStatistics(queryParams) {
   return response.data;
 }
 
+async function fetchRounds(queryParams) {
+  const queryParamsArray = Object.keys(queryParams).map(
+    (key) => `${key}=${queryParams[key]}`
+  );
+  const url = `${
+    config.externalAPi.baseUrl
+  }/fixtures/rounds?${queryParamsArray.join("&")}`;
+
+  const response = await axios.get(url, {
+    headers: {
+      "x-rapidapi-key": config.externalAPi.apiKey,
+    },
+  });
+  console.log("response fetchRounds :", response.data);
+  return response.data;
+}
+
 module.exports = {
   fetchTimezone,
   fetchFixtures,
@@ -147,4 +165,5 @@ module.exports = {
   headtohead,
   fetchStandings,
   fixtureStatistics,
+  fetchRounds
 };

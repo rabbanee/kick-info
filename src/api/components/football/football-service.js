@@ -9,6 +9,7 @@ const {
   fetchLeagues,
   fetchCountries,
   fetchSeasons,
+  fetchRounds,
 } = require("../../../utils/integrations/football-api");
 
 async function getTimezone() {
@@ -81,26 +82,9 @@ function filterLeagues(leagues, { countries, name, code, season }) {
 }
 
 async function getSeasons(params = {}) {
-  let seasons = await footballRepository.GetSeasons("seasons list");
-
-  if (!seasons?.data?.length) {
-    try {
-      const seasonsResponse = await fetchSeasons(params);
-      seasons = seasonsResponse?.response || []; // Pastikan tidak undefined
-
-      if (seasons.length === 0) {
-        seasons = getDummySeasons(); // Fallback data
-      }
-
-      await footballRepository.SaveSeasons("seasons list", seasons);
-    } catch (error) {
-      seasons = getDummySeasons(); // Fallback jika API error
-    }
-  } else {
-    seasons = filterSeasons(seasons.data, params);
-  }
-
-  return seasons;
+  // let seasons = await footballRepository.GetSeasons("seasons list");
+  const seasonsResponse = await fetchSeasons(params);
+  return seasonsResponse;
 }
 
 function getDummySeasons() {
@@ -129,6 +113,11 @@ async function getfixtureStatistics(queryParams) {
   return headToHeadResponse;
 }
 
+async function getFixtureRounds(queryParams) {
+  const apiResponse = await fetchRounds(queryParams);
+  return apiResponse;
+}
+
 module.exports = {
   getTimezone,
   getFixtures,
@@ -139,4 +128,5 @@ module.exports = {
   getCountries,
   getLeagues,
   getSeasons,
+  getFixtureRounds,
 };

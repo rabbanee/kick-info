@@ -89,9 +89,9 @@ async function SaveLeagues(name, data) {
   return saveLeagues(name, data);
 }
 
-async function GetSeasons(name) {
-  return Football.findOne({name});
-}
+// async function GetSeasons(name) {
+//   return Football.findOne({name});
+// }
 
 async function SaveSeasons(name, data) {
   return saveSeasons(name, data);
@@ -112,7 +112,7 @@ module.exports = {
   SaveCountries,
   // GetLeagues,
   SaveLeagues,
-  GetSeasons,
+  // GetSeasons,
   SaveSeasons,
   GetFixtures,
   SaveFixtures,
