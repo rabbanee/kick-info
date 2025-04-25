@@ -40,18 +40,24 @@ async function fetchCountries(params = {}) {
   return response.data;
 }
 
-async function fetchLeagues(params = {}) {
-  const response = await axios.get(`${config.externalAPi.baseUrl}/leagues`, {
+async function fetchLeagues(queryParams) {
+  const queryParamsArray = Object.keys(queryParams).map(
+    (key) => `${key}=${queryParams[key]}`
+  );
+  const response = await axios.get(`${config.externalAPi.baseUrl}/leagues${queryParamsArray.join(
+    "&"
+  )}`, {
     headers: {
       "x-rapidapi-key": config.externalAPi.apiKey,
     },
-    params: {
-      country: params.country,
-      name: params.name,
-      code: params.code,
-      season: params.season,
-    },
+    // params: {
+    //   country: params.country,
+    //   name: params.name,
+    //   code: params.code,
+    //   season: params.season,
+    // },
   });
+  console.log('response: ', response.data);
   return response.data;
 }
 

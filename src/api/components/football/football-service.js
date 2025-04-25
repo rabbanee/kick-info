@@ -47,13 +47,8 @@ function filterFixtures(fixtures, { leagues, name, id, live }) {
 async function getCountries(params = {}) {
   let countries = await footballRepository.GetCountries("countries list");
 
-  if (!countries?.data?.length) {
-    const countriesResponse = await fetchCountries(params);
-    countries = countriesResponse.response;
-    await footballRepository.SaveCountries("countries list", countries);
-  } else {
-    countries = filterCountries(countries.data, params);
-  }
+  const countriesResponse = await fetchCountries(params);
+  countries = countriesResponse.response;
 
   return countries;
 }
@@ -70,19 +65,8 @@ function filterCountries(countries, { name, code, search }) {
 }
 
 async function getLeagues(params = {}) {
-  let leagues = await footballRepository.GetLeagues("leagues list");
-
-  if (!leagues?.data?.length) {
-    const leaguesResponse = await fetchLeagues(params);
-    leagues = leaguesResponse.response;
-    await footballRepository.SaveLeagues(
-      "leagues list",
-      leaguesResponse.response
-    );
-  } else {
-    leagues = filterLeagues(leagues.data, params);
-  }
-
+  const leaguesResponse = await fetchLeagues(params);
+  leagues = leaguesResponse.response;
   return leagues;
 }
 

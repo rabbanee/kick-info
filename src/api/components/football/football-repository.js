@@ -66,8 +66,6 @@ const saveFixtures = async () => {
 };
 
 
-
-
 async function GetTimezone(name) {
   return Football.findOne({ name });
 }
@@ -83,9 +81,9 @@ async function SaveCountries(name, data) {
   return saveCountries(name, data);
 }
 
-async function GetLeagues(name) {
-  return Football.findOne({name});
-}
+// async function GetLeagues(name) {
+//   return Football.findOne({name});
+// }
 
 async function SaveLeagues(name, data) {
   return saveLeagues(name, data);
@@ -112,11 +110,10 @@ module.exports = {
   SaveTimezone,
   GetCountries,
   SaveCountries,
-  GetLeagues,
+  // GetLeagues,
   SaveLeagues,
   GetSeasons,
   SaveSeasons,
   GetFixtures,
   SaveFixtures,
 };
-
