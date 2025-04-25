@@ -64,7 +64,7 @@ function filterCountries(countries, { name, code, search }) {
   });
 }
 
-async function getLeagues(params = {}) {
+async function getLeagues(params) {
   const leaguesResponse = await fetchLeagues(params);
   leagues = leaguesResponse.response;
   return leagues;
